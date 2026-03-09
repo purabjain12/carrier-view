@@ -1,0 +1,126 @@
+{
+  "version": "1.0",
+  "purpose": "Frontend rendering contract for Career View launch",
+  "single_career_view": {
+    "required_fields": [
+      "career",
+      "career_fit_score",
+      "career_fit_breakdown",
+      "salary_projection",
+      "salary_projection_scenarios",
+      "job_demand",
+      "stability_score",
+      "top_skills",
+      "explanation",
+      "confidence_level",
+      "disclaimer"
+    ],
+    "ui_mapping": {
+      "career_fit_score": {
+        "label": "Career Fit Score",
+        "type": "score_badge",
+        "tooltip": "A personalized score based on skill fit, salary trajectory, demand, and stability."
+      },
+      "career_fit_breakdown": {
+        "label": "Why this score?",
+        "type": "expandable_breakdown",
+        "show_fields": [
+          "component_score",
+          "weight",
+          "contribution",
+          "reasoning"
+        ]
+      },
+      "salary_projection": {
+        "label": "Salary Projection",
+        "type": "line_chart_series",
+        "x_axis": "year_index_starting_1",
+        "y_axis": "salary_value"
+      },
+      "salary_projection_scenarios": {
+        "label": "Scenario Range",
+        "type": "band_chart_or_multi_line",
+        "required_keys": [
+          "best",
+          "average",
+          "worst"
+        ]
+      },
+      "job_demand": {
+        "label": "Market Demand",
+        "type": "status_chip",
+        "allowed_labels": [
+          "Growing",
+          "Stable",
+          "Declining"
+        ]
+      },
+      "stability_score": {
+        "label": "Stability",
+        "type": "meter",
+        "range": [
+          0.0,
+          1.0
+        ]
+      },
+      "confidence_level": {
+        "label": "Confidence Level",
+        "type": "trust_chip",
+        "allowed_values": [
+          "High",
+          "Medium",
+          "Low"
+        ],
+        "interpretation": {
+          "High": "Core supported CS family",
+          "Medium": "Specialized role estimate",
+          "Low": "Edge case or limited signal"
+        }
+      },
+      "disclaimer": {
+        "label": "Disclaimer",
+        "type": "inline_info_text"
+      }
+    }
+  },
+  "comparison_view": {
+    "required_fields": [
+      "careers_compared",
+      "comparison",
+      "recommended_career",
+      "recommendation_reason",
+      "confidence_level",
+      "disclaimer"
+    ],
+    "comparison_item_fields": [
+      "career",
+      "career_fit_score",
+      "avg_salary_year_5",
+      "job_demand",
+      "stability_score",
+      "strengths",
+      "tradeoffs",
+      "explanation_snippet"
+    ]
+  },
+  "error_contract": {
+    "shape": {
+      "ok": false,
+      "error": {
+        "message": "string_user_friendly",
+        "code": "INVALID_REQUEST"
+      }
+    },
+    "frontend_behavior": [
+      "show error message inline near form",
+      "keep previously selected inputs",
+      "do not clear form on error"
+    ]
+  },
+  "serialization_requirements": {
+    "no_nan": true,
+    "no_infinity": true,
+    "deterministic_field_order": true,
+    "json_serializable_without_transforms": true
+  }
+}

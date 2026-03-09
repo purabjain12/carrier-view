@@ -1,0 +1,230 @@
+{
+  "version": "1.0",
+  "purpose": "Frontend request schema for Career View launch",
+  "fields": {
+    "career_family": {
+      "type": "single_select",
+      "required": true,
+      "label": "Career Family",
+      "placeholder": "Choose your target career family",
+      "default": "software_engineer",
+      "allowed_values": [
+        {
+          "value": "software_engineer",
+          "label": "Software Engineer"
+        },
+        {
+          "value": "data_analyst",
+          "label": "Data Analyst"
+        },
+        {
+          "value": "data_scientist",
+          "label": "Data Scientist"
+        },
+        {
+          "value": "product_manager",
+          "label": "Product Manager (Tech)"
+        }
+      ],
+      "validation": {
+        "must_be_in_allowed_values": true
+      }
+    },
+    "specialization": {
+      "type": "single_select_conditional",
+      "required": false,
+      "label": "Specialization (Optional)",
+      "placeholder": "Choose specialization",
+      "default": "",
+      "visible_when": {
+        "career_family": "software_engineer"
+      },
+      "allowed_values_when_visible": [
+        {
+          "value": "web_development",
+          "label": "Web Development"
+        },
+        {
+          "value": "backend",
+          "label": "Backend"
+        },
+        {
+          "value": "full_stack",
+          "label": "Full Stack"
+        },
+        {
+          "value": "devops",
+          "label": "DevOps"
+        },
+        {
+          "value": "cloud",
+          "label": "Cloud"
+        },
+        {
+          "value": "cyber_security",
+          "label": "Cyber Security"
+        },
+        {
+          "value": "qa_testing",
+          "label": "QA / Testing"
+        }
+      ],
+      "validation": {
+        "must_be_empty_when_hidden": true,
+        "must_be_in_allowed_values_when_visible": true
+      }
+    },
+    "skills": {
+      "type": "multi_select_searchable",
+      "required": true,
+      "label": "Skills",
+      "placeholder": "Select your strongest skills",
+      "default": [
+        "python",
+        "sql"
+      ],
+      "source": "career_master.top_skills (deduplicated)",
+      "validation": {
+        "min_items": 2,
+        "max_items": 8,
+        "must_be_known_values": true
+      },
+      "helper_text": "Pick 2 to 8 skills that best reflect what you can do today."
+    },
+    "degree": {
+      "type": "single_select",
+      "required": true,
+      "label": "Degree / Background",
+      "placeholder": "Select your educational background",
+      "default": "computer_science",
+      "allowed_values": [
+        {
+          "value": "computer_science",
+          "label": "Computer Science / IT"
+        },
+        {
+          "value": "engineering",
+          "label": "Engineering (Non-CS)"
+        },
+        {
+          "value": "business",
+          "label": "Business / Management"
+        },
+        {
+          "value": "science_math_stats",
+          "label": "Science / Math / Stats"
+        },
+        {
+          "value": "arts_humanities",
+          "label": "Arts / Humanities"
+        },
+        {
+          "value": "other",
+          "label": "Other"
+        }
+      ],
+      "validation": {
+        "must_be_in_allowed_values": true
+      }
+    },
+    "interests": {
+      "type": "multi_select",
+      "required": false,
+      "label": "Interests (Optional)",
+      "placeholder": "Choose what you enjoy most",
+      "default": [],
+      "allowed_values": [
+        {
+          "value": "coding",
+          "label": "Coding"
+        },
+        {
+          "value": "problem_solving",
+          "label": "Problem Solving"
+        },
+        {
+          "value": "research",
+          "label": "Research"
+        },
+        {
+          "value": "management",
+          "label": "Management"
+        },
+        {
+          "value": "design",
+          "label": "Design"
+        },
+        {
+          "value": "data_analysis",
+          "label": "Data Analysis"
+        }
+      ],
+      "validation": {
+        "max_items": 3,
+        "must_be_known_values": true
+      }
+    },
+    "risk_preference": {
+      "type": "toggle_three_state",
+      "required": true,
+      "label": "Risk Preference",
+      "default": "medium",
+      "allowed_values": [
+        {
+          "value": "low",
+          "label": "Low Risk (stable, predictable)"
+        },
+        {
+          "value": "medium",
+          "label": "Medium Risk (balanced)"
+        },
+        {
+          "value": "high",
+          "label": "High Risk (higher upside)"
+        }
+      ],
+      "validation": {
+        "must_be_in_allowed_values": true
+      }
+    },
+    "years_to_simulate": {
+      "type": "slider",
+      "required": true,
+      "label": "Years to Simulate",
+      "default": 5,
+      "range": {
+        "min": 3,
+        "max": 10,
+        "step": 1
+      },
+      "validation": {
+        "must_be_integer": true,
+        "min": 3,
+        "max": 10
+      }
+    }
+  },
+  "request_payload_shape": {
+    "user_profile": {
+      "career_family": "string",
+      "specialization": "string_optional",
+      "skills": "string[]",
+      "degree": "string",
+      "interests": "string[]",
+      "risk_preference": "low|medium|high",
+      "years_to_simulate": "number"
+    },
+    "careers": "string[]_optional_for_comparison_mode"
+  },
+  "form_level_validation": {
+    "submit_enabled_when": [
+      "career_family selected",
+      "skills count >= 2",
+      "skills count <= 8",
+      "degree selected",
+      "risk_preference selected",
+      "years_to_simulate in [3..10]",
+      "if specialization selected, it is valid for career_family"
+    ]
+  }
+}

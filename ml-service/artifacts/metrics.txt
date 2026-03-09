@@ -1,0 +1,1 @@
+{'salary_mae': 231992.33, 'demand_accuracy': 0.9966}
